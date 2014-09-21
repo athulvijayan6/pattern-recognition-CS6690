@@ -1,0 +1,483 @@
+% @Author: athul
+% @Date:   2014-09-15 12:11:31
+% @Last Modified by:   Athul Vijayan
+% @Last Modified time: 2014-09-22 00:45:07
+
+\documentclass[11pt,paper=a4,answers]{exam}
+\usepackage{graphicx,lastpage}
+\usepackage{upgreek}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{censor}
+\usepackage{amsmath}
+\usepackage{amssymb, amsthm}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\usepackage{bm}
+\usepackage{caption}
+\usepackage{enumerate}
+\censorruledepth=-.2ex
+\censorruleheight=.1ex
+\hyphenpenalty 10000
+\usepackage[paperheight=10.5in,paperwidth=8.27in,bindingoffset=0in,left=0.8in,right=1in,
+top=0.7in,bottom=1in,headsep=.5\baselineskip]{geometry}
+\flushbottom
+\usepackage[normalem]{ulem}
+\renewcommand\ULthickness{2pt}   %%---> For changing thickness of underline
+\setlength\ULdepth{1.5ex}%\maxdimen ---> For changing depth of underline
+\renewcommand{\baselinestretch}{1}
+\pagestyle{empty}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\pagestyle{headandfoot}
+\headrule
+
+\newcommand{\continuedmessage}{%
+\ifcontinuation{\footnotesize continues\ldots}{}%
+ }
+\runningheader{\footnotesize \today}
+{\footnotesize Machine Learning - Pattern Recognition}
+{\footnotesize Page \thepage\ of \numpages}
+\footrule
+\footer{\footnotesize}
+{}
+{\ifincomplete{\footnotesize section \IncompleteQuestion\ continues
+on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go        on to the next page\ldots}}}
+
+\usepackage{cleveref}
+\crefname{figure}{figure}{figures}
+\crefname{question}{question}{questions}
+%==============================================================
+\begin{document}
+
+\noindent
+\begin{minipage}[l]{.1\textwidth}%
+\noindent
+\end{minipage}
+\hfill
+\begin{minipage}[r]{.68\textwidth}%
+\begin{center}
+{\large \bfseries \par
+\Large Machine Learning Notes \\[2pt]
+\small   \par}
+\end{center}
+\end{minipage}
+\begin{minipage}[l]{.195\textwidth}%
+\noindent
+{\footnotesize}
+\end{minipage}
+\par
+\noindent
+\uline{\today \hfill \normalsize\emph \hfill       Athul Vijayan}\\
+\begin{questions}
+% ============================== Content starts here
+\question \textbf{Theory}\\
+    \begin{enumerate}[]
+        \item $\vec{x} = [x_1, x_2, \cdots, x_d] \in \mathbb{R}^d$ is the \textit{feature vector} in a vector space called \textit{feature space} containing $d$ continuous features in it.
+        \item $\boldsymbol\omega = [\omega_1, \omega_2, \cdots, \omega_c]$ be the c finite \textit{state of nature} / catogories.
+    \end{enumerate}
+    We follow from bayes theorem that
+        $$ P(\omega_i|\vec{x}) = \frac{P(\vec{x}|\omega_i) P(\omega_i)}{P(\vec{x})}$$
+    In bayesian classification we decide to take action $\alpha_i$ for which Conditional risk $R(\alpha_i | \vec{x})$ is minimum. That is, maximum discriminant will correspond to mimimum conditional risk. And for minimum error rate classifier, we can define $g_i(\vec{x}) = P(\omega_i|\vec{x})$. Maximum discriminant function corresponds to the maximum posterior probability. Also if $f(.)$ is a monotonously increasing function, then $f(g_i(\vec{x}))$ will also give same classifier.
+    \begin{align*}
+        g_i(x) &= P(\omega_i | \vec{x}) \\
+        &= P(\vec{x}|\omega_i) P(\omega_i) \\
+        &= ln(P(\vec{x}|\omega_i)) + ln(P(\omega_i)) \qquad |\quad ln(.) \text{ is monotonously increasing}
+    \end{align*}
+    For a dataset with $c$ classes denoted as $\omega_1, \omega_2, \cdots, \omega_c$, we assume the likelihood probability in each class $\omega_i$ is distributed as Multivariate Gaussian. i.e. $P(\vec{x} | \omega_i) \sim \mathcal{N}(\bm{\mu}_i, \vec{\Sigma}_i)$.\\
+        Our General Bayes classifier becomes:
+        $$g_i(\vec{x}) = -{1 \over 2} (\vec{x} - \bm{\mu}_i) \bm{\Sigma}_i ^{-1} (\vec{x} - \bm{\mu}_i)^T - {d \over 2}\ln2\pi  - {1 \over 2}\ln|\bm{\Sigma}_i| + \ln P(\omega_i)$$
+        Now depending on the covariance matrix $\bm{\Sigma}_i$, various cases can be generated.\\
+        One Interesting case is that when $\bm{\Sigma}_i$ is diagonal, the covariance/ correlation between any two features is zero. That implies that we do not get any information about feature $x_i$ from features $x_j$ if $j \neq i$. In terms of probability, $P(x_i|\omega_k, \{x_j \quad \forall \quad j \neq i\}) = P(x_i| \omega_k)$. This is called \textbf{naive bayes} classifier.
+    \begin{enumerate}[i.]
+        \item \textbf{Bayesian Classifier with Covariance same for all classes.} $\bm{\Sigma_i} = \bm{\Sigma}$.\\
+        
+        Since $\bm{\Sigma_i} = \bm{\Sigma}$, we can drop second and third terms because they are independent of $i$ and will be same for every class. making it
+        \begin{align*}
+            g_i(\vec{x}) &= -{1 \over 2} (\vec{x} - \bm{\mu}_i) \bm{\Sigma}_i ^{-1} (\vec{x} - \bm{\mu}_i)^T + \ln P(\omega_i)\\
+            &= \left(\bm{\Sigma^{-1}} \bm{\mu}_i\right)^T \vec{x} - {1 \over 2}\bm{\mu}_i ^T \bm{\Sigma} ^{-1}\bm{\mu_i} + \ln P(\omega_i)
+        \end{align*}
+        We can see this is a linear classifier. If we assume every class conditional probability is distributed as Multivariate Gaussian with same Covariance $\bm{\Sigma}$ like this case, the resulting classifier is called linear discriminant.\\
+        Now we need to get estimated $\bm{\mu}_i$ and $\bm{\Sigma}$. Clearly if we calculate the covariance of measured data in each class, they will not be similar across classes. So we find estimate for parameters by maximizing likelihood.
+        \begin{enumerate}[]
+            \item let sampes in class $\omega_i$ be denoted as $\mathcal{D}_i$ such that the total samples can be expressed as $\mathcal{D} = \{\mathcal{D}_1, \mathcal{D}_2, \cdots, \mathcal{D}_c\}$. Let number of samples in $\mathcal{D}_i$ be $N_i$ and number of total samples, i. e number of points in $\mathcal{D}$ is $N$.
+            \item In the generative learning approach, we assume each of $\mathcal{D}_i$ is distributed as gaussian with mean $\bm{\mu}_i$ and covariance $\bm{\Sigma}_i$. Note that in LDA, covariance of every $\mathcal{D}_i$ is same.
+        \end{enumerate}
+        Log Likelihood function is given by:
+        $$l(\bm{\theta}) = \ln P(\mathcal{D}| \bm{\theta}))$$
+        and $\bm{\theta}$ that maximizes $l(\bm{\theta})$ is 
+        $$\bm{\hat{\theta}} = \argmax_{\bm{\theta}} \quad l(\bm{\theta})$$
+        With gaussian aproximation, 
+        \begin{align*}
+            P(\mathcal{D}| \bm{\theta}) &= \prod _{i=1}^N P(\vec{x}_i| \omega)\\
+            &= \prod _{k=1}^c \prod _{\vec{x}_i \in \mathcal{D}_k} P(\vec{x}_i | \omega_k) \\ 
+            \Rightarrow l(\bm{\theta}) &= \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} \ln P(\vec{x}_i | \omega_k) \\
+            &= \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2}(\vec{x}_i - \bm{\mu}_k) \bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T - {1 \over 2}\ln |\bm{\Sigma}|\\
+        \end{align*}
+        Now to estimate parameters, we maximize $l(\bm{\theta})$. 
+        \begin{align*}
+            \nabla _{\bm{\theta}} l(\bm{\theta}) = \bm{0}
+        \end{align*}
+        Now to find $\bm{\mu}_j$ of gaussian pdf of class $P(\vec{x}| \omega_j)$,
+        \begin{align*}
+            \nabla _{\bm{\mu}_j} l(\bm{\theta}) &= 0 \\
+            \nabla _{\bm{\mu}_j} \left( \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2}(\vec{x}_i - \bm{\mu}_k) \bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T - {1 \over 2} \ln |\bm{\Sigma}| \right) &= 0
+        \end{align*}
+        For $k \neq j$, we can see all the terms goes to zero. we can denote this estimated mean for class $j$ as $\hat{\bm{\mu}}_j$.
+        \begin{align}
+            \boxed{\hat{\bm{\mu}}_j = {1 \over N_j} \sum_{\vec{x}_i \in \mathcal{D}_j} \vec{x}_i }
+        \end{align}
+        And for $\bm{\Sigma}$, 
+        \begin{align*}
+            \nabla _{\bm{\Sigma}} l(\bm{\theta}) &= 0 \\
+            \nabla _{\bm{\Sigma}} \left( \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2}(\vec{x}_i - \bm{\mu}_k) \bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T - {1 \over 2} \ln |\bm{\Sigma}| \right) &= 0\\
+            \nabla _{\bm{\Sigma}} \left( \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2} tr\left((\vec{x}_i - \bm{\mu}_k) \bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T\right) - {1 \over 2} \ln |\bm{\Sigma}| \right) &= 0\\
+            \nabla _{\bm{\Sigma}} \left( \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2} tr\left(\bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T (\vec{x}_i - \bm{\mu}_k)\right) - {1 \over 2} \ln |\bm{\Sigma}| \right) &= 0 \\
+            \nabla _{\bm{\Sigma}} \left( \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2} tr\left(\bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T (\vec{x}_i - \bm{\mu}_k)\right)  \right) - {N \over 2} \bm{\Sigma}^{-1} &= 0      
+        \end{align*}
+        Above, we have used properties,
+        \begin{itemize}
+             \item $tr(\text{Real number}) =$ Real Number
+             \item $tr(ABC) = tr(BCA)$
+             \item $\nabla _A |A| = A^{-1}$
+         \end{itemize}
+        That gives us,
+        \begin{align}
+        \boxed{\hat{\bm{\Sigma}} = {1 \over N}\sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} (\vec{x}_i - \bm{\mu}_k)^T (\vec{x}_i - \bm{\mu}_k)}
+        \end{align}
+        is the best estimate of $\bm{\Sigma}$ in the maximum likelihood sense. The parameter is biased.
+
+        \item \textbf{Bayesian Classifier with Covariance different for all classes}
+        It is straight forward, we can neglect only the constant term in the general discriminant function.
+        $$g_i(\vec{x}) = -{1 \over 2} (\vec{x} - \bm{\mu}_i) \bm{\Sigma}_i ^{-1} (\vec{x} - \bm{\mu}_i)^T - {1 \over 2}\ln|\bm{\Sigma}_i| + \ln P(\omega_i)$$
+        This is a Quadratic Discriminant function. We assume each for class $k$ conditional probabilities belong to a gaussian distribution with $\bm{\mu}_k$ and $\bm{\Sigma}_k$.\\
+        To estimate this parameters using maximum likelihood estimation.
+        \begin{align*}
+            P(\mathcal{D}_k| \bm{\theta}_k) &= \prod _{i=1}^{N_k} P(\vec{x}_i| \omega_k)\\
+            \Rightarrow l(\bm{\theta}) &= \sum_{\vec{x}_i \in \mathcal{D}_k} \ln P(\vec{x}_i | \omega_k) \\
+            &= \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2}(\vec{x}_i - \bm{\mu}_k) \bm{\Sigma}_k^{-1} (\vec{x}_i - \bm{\mu}_k)^T - \ln |\bm{\Sigma}_k|\\
+        \end{align*}
+        Now to estimate parameters, we maximize $l(\bm{\theta})$. 
+        \begin{align*}
+            \nabla _{\bm{\theta}} l(\bm{\theta}) = \bm{0}
+        \end{align*}
+        Now to find $\bm{\mu}_k$ of gaussian pdf of class $P(\vec{x}| \omega_k)$,
+        \begin{align*}
+            \nabla _{\bm{\mu}_k} l(\bm{\theta}) &= 0 \\
+            \nabla _{\bm{\mu}_k} \left( \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2}(\vec{x}_i - \bm{\mu}_k) \bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T - {1 \over 2} \ln |\bm{\Sigma}| \right) &= 0\\
+        \end{align*}
+        That gives the sample mean of the class as the optimal parameter.
+        $$\boxed{\hat{\bm{\mu}}_k = {1 \over N_k} \sum_{\vec{x}_i \in \mathcal{D}_k} \vec{x}_i }$$
+        Now for Covariance estimation,
+        \begin{align*}
+            \nabla _{\bm{\Sigma}_k} l(\bm{\theta}) &= 0 \\
+            \nabla _{\bm{\Sigma}_k} \left( \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2}(\vec{x}_i - \bm{\mu}_k) \bm{\Sigma}^{-1} (\vec{x}_i - \bm{\mu}_k)^T - {1 \over 2} \ln |\bm{\Sigma}| \right) &= 0\\
+        \end{align*}
+        Using properties used above,  we find optimal estimate is the biased covariance of class $k$.
+        \begin{align}
+            \boxed{\hat{\bm{\Sigma}}_k = {1 \over N_k} \sum_{\vec{x}_i \in \mathcal{D}_k} (\vec{x}_i - \bm{\mu}_k)^T (\vec{x}_i - \bm{\mu}_k)}
+        \end{align}
+        \item \textbf{Naive Bayes}\\
+            With naive bayes, we have $\bm{\Sigma}_{ij} = 0 \qquad \forall \quad i \neq j$ diagonal. Intiuitively, it means that we do not get any information about a feature if we know the value of any other feature vector. We can write our joint class conditional probability as.
+            \begin{align*}
+                P(\vec{x}| \omega_k) &= P(x_1, x_2, \cdots, x_d | \omega_k) \qquad \text{$x_i$ are individual features}\\
+                &= P(x_1| \omega_k) P(x_2, x_3, \cdots, x_d| \omega_k, x_1)\\
+                &= P(x_1| \omega_k) P(x_2| \omega_k, x_1) P(x_3, \cdots, x_d| \omega_k, x_1, x_2)\\
+                \vdots\\
+                &= P(x_1| \omega_k) P(x_2| \omega_k, x_1)  \cdots P(x_d| \omega_k, x_1, x_2, \cdots, x_{d-1})\\
+            \end{align*}
+            Now naive payes assumes that, features are independent that is,
+            $$P(x_i|\omega_k, \{x_j \quad \forall \quad j \neq i\}) = P(x_i| \omega_k)$$
+            That gives us, 
+            \begin{align*}
+            P(\vec{x} \vert \omega_k) &= P(x_1 \vert \omega_k) P(x_2 \vert \omega_k) \cdots P(x_d \vert \omega_k)\\    
+            &= \prod _{i=1}^d P(x_i \vert \omega_k)
+            \end{align*}
+            Now we assumed already that $P(\vec{x}| \omega_k) \sim \mathcal{N}(\bm{\mu}_k , \bm{\Sigma}_k)$. Now with independence condition, we can say $P(x_i| \omega_k) \sim \mathcal{N}(\mu_i , \sigma_i^2)$ where $\mu_i = \bm{\mu}_i$ and $\sigma_i^2 = \bm{\Sigma}_{ii}$. This means each feature itself is distributed as univariate gaussian with mean and variance corresponding to that feature alone. We will find the optimum estimate of these parameters now:\\
+            \begin{itemize}
+                \item \textbf{Naive Bayes with $\bm{C} = \sigma ^2 \bm{\mathrm{I}}$}\\
+                Like in bayesian case, we assume a gaussian distribution with different covariance for every class.\\
+                Let covariance of class $\omega_k$ be in the form of $\bm{\Sigma}_k = \sigma_k ^2 \bm{I}$. Here again, we find the optimum estimation for scalar $\sigma_k ^2$ using maximizing likelihood function.\\
+                Let $C = \sigma_k^2$
+                \begin{align*}
+                    l(\bm{\theta}) &= \sum_{\vec{x}_i \in \mathcal{D}_k} \ln P(\vec{x}_i| \omega_k) \\
+                    &= \sum_{\vec{x}_i \in \mathcal{D}_k} -{1 \over 2} (\vec{x}_i - \bm{\mu}_k){1 \over C}\bm{I} (\vec{x}_i - \bm{\mu}_k)^T -{1 \over 2} \ln C
+                \end{align*}
+                Now differentiating and equating to zero, we get estimate of $\bm{\mu}$ as
+                $$\boxed{\hat{\bm{\mu}}_k = {1 \over N_k} \sum_{\vec{x}_i \in \mathcal{D}_k} \vec{x}_i }$$
+
+                and optimal value of $\sigma_k ^2$ is:
+                \begin{align}
+                    \boxed{\hat{\sigma}_k ^2 = {1 \over N_k} \sum_{\vec{x}_i \in \mathcal{D}_k} (\vec{x}_i - \bm{\mu}_k) (\vec{x}_i - \bm{\mu}_k)^T}
+                \end{align}
+                Note that it is a scalar for every class.
+
+
+                \item \textbf{Naive Bayes with Different covariance for all classes}\\
+                Like in bayesian case, we assume a gaussian distribution with different covariance for every class.\\
+                Now to estimate optimum parameters for the model, we use likelihood maximizing as before.
+                \begin{align*}
+                    l(\bm{\theta}_k) &= \sum_{\vec{x}_i \in \mathcal{D}_k} \sum_{i=1}^d \ln P(x_i| \omega_k)\\
+                \end{align*}
+                
+                Now, $\frac{\partial l(\bm{\theta}_k)}{\partial \bm{\mu}_k} = 0$ gives us,
+                $$\boxed{\hat{\bm{\mu}}_k = {1 \over N_k} \sum_{\vec{x}_i \in \mathcal{D}_k} \vec{x}_i }$$
+                Now, $\frac{\partial l(\bm{\theta}_k)}{\partial \sigma_d} = 0$ will give us the optimum variance $\sigma _d^2$ of the univariate gaussian distribution where feature $x_d$ belongs.
+                $$ \sigma _d^2 = {1 \over N_k}\sum_{\vec{x}_i \in \mathcal{D}_k} ((x_d)_i - \mu_d)^2$$
+                So best $\bm{\Sigma}$ is:
+                $$\boxed{(\hat{\bm{\Sigma}}_k)_{lm} =
+                \begin{cases}
+                    {1 \over N_k}\sum_{\vec{x}_i \in \mathcal{D}_k} ((x_l)_i - \mu_l)^2 &\text{ if } l = m\\
+                    0 & \text{otherwise}
+                \end{cases} }$$
+                So the best estimate has variance of each feature along its diagonals and zero everywhere else.
+
+                \item \textbf{Naive Bayes with Same covariance for all classes}\\
+                Like in bayesian case, we maximize the overall likelihood function.\\
+                \begin{align*}
+                    P(\mathcal{D}| \bm{\theta}) &= \prod _{i=1}^N P(\vec{x}_i| \omega)\\
+                    &= \prod _{k=1}^c \prod _{\vec{x}_i \in \mathcal{D}_k} \prod _{m=1}^d P((x_m)_i | \omega_k) \\ 
+                    \Rightarrow l(\bm{\theta}) &= \sum_{k=1}^c \sum_{\vec{x}_i \in \mathcal{D}_k} \sum_{m=1}^d \ln P((x_m)_i | \omega_k) \\
+                \end{align*}
+                Maximizing this by differentiating gives us:
+                $$\boxed{\hat{\bm{\mu}}_k = {1 \over N_k} \sum_{\vec{x}_i \in \mathcal{D}_k} \vec{x}_i }$$
+                and optimum $\bm{\Sigma}$ is:
+                $$\boxed{ (\hat{\bm{\Sigma}})_{lm} =
+                \begin{cases}
+                    {1 \over N}\sum_{k=1}^c\sum_{\vec{x}_i \in \mathcal{D}_k} ((x_l)_i - \mu_l)^2 &\text{ if } l = m\\
+                    0 & \text{otherwise}
+                \end{cases} }$$
+                So the best estimate has cumulative variance of each feature along its diagonals and zero everywhere else.
+            \end{itemize}
+    \end{enumerate}
+\newpage
+\question \textbf{Implementation And results}
+\begin{enumerate}[i.]
+    \item \textbf{The linearly sepearble data with three classes}.\\
+        First step is to visualize the data and predict the accuracy of our algorithms intuitively. This will help us identify outliers and bad samples in data and plan ahead accordingly. Figure ~\ref{fig:scatterData1} shows scatter plot.\\
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=\textwidth]{data1}
+            \vspace{-30pt}
+            \caption{Scatter plot of Linearly sepearble data}
+            \label{fig:scatterData1}
+        \end{figure}\\
+        As it is evident from visual inspection, the data looks clean in the sense that it does not have outliers or missing feature etc.. So we will apply our algorithms to this data with different choices of covariance. And draw inferences. As the each classes are well seperated, we can expect a good accuracy for our model.
+        \begin{enumerate}
+            \item \textbf{Case 1: Bayes with Covariance same for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure ~\ref{fig:data1g1} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1gaussian1}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of linearly sepearble data with bayesian model with same covariance}
+                \label{fig:data1g1}
+            \end{figure}\\
+            We can visualize the decision boundary better by examining the contour plot and the Discriminant boundary. The test data is plotted, the contours of each class conditional probabilities are also plotted. The plot is Figure ~\ref{fig:data1c1}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1c1}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for linear sepearble data with bayesian model with same covariance}
+                \label{fig:data1c1}
+            \end{figure}\\
+            As we can see, The shape of all the gaussians are similar. This is caused by the same covariance of each classes. As the gaussians are same in shape, only their mean difffer. So it gives us a linear discriminant function of which boundaries are shown.\\
+            The decision boundary passes through the midpoint of line segment joining the means of any pair of classes. This is because of equal prior probability.
+            
+            \item \textbf{Case 2: Bayes with Covariance different for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g2} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1gaussian2}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for bayesian model with different covariance}
+                \label{fig:data1g2}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot.The plot is Figure~\ref{fig:data1c2}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1c2}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for linear sepearble data for bayesian model with different covariance}
+                \label{fig:data1c2}
+            \end{figure}\\
+            As we can see, The shape of all the gaussians are dissimilar as the covariance is different for each class. So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+
+            \item \textbf{Case 3: Naive Bayes with} $\bm{\Sigma}_k = \sigma_k^2\bm{I}$\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonals matrix with same elements, we expect a gaussian whose contours are circular. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g3} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1gaussian3}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:data1g3}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric circles in the contour plot. The plot is Figure~\ref{fig:data1c3}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1c3}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for linear seperble data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:data1c3}
+            \end{figure}
+            As we can see, The shape of all the gaussians are symmetrical / circular contours.The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.\\
+
+            \item \textbf{Case 4: Naive Bayes with same covariance for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is same, we expect a linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g4} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1gaussian4}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for Naive Bayes with same covariance}
+                \label{fig:data1g4}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data1c4}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1c4}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for linear seperble data for Naive Bayes with different covariance}
+                \label{fig:data1c4}
+            \end{figure}
+            The covariance is same for each class, So it gives us a linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+
+            \item \textbf{Case 5: Naive Bayes with different covariance for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is different, we expect a non linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g5} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1gaussian5}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for Naive Bayes with different covariance}
+                \label{fig:data1g5}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data1c5}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data1c5}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for linear seperble data for Naive Bayes with different covariance}
+                \label{fig:data1c5}
+            \end{figure}
+            The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+        \end{enumerate}
+
+    \FloatBarrier
+    \item \textbf{Non linearly seperable data with three classes}.\\
+        Like before, first we visualize data and draw some conclusions. This will help us identify outliers and bad samples in data and plan ahead accordingly. Figure ~\ref{fig:scatterData2} shows scatter plot.\\
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=\textwidth]{data2}
+            \vspace{-30pt}
+            \caption{Scatter plot of Linearly sepearble data}
+            \label{fig:scatterData2}
+        \end{figure}\\
+        As it is evident from visual inspection, the data looks clean in the sense that it does not have outliers or missing feature etc..But we can tell from the scatterplot that linear discriminants will perform less efficient than non linear discriminants. Since there are less overlapping data, we can tell that accuracy will be good generally.
+        \begin{enumerate}
+            \item \textbf{Case 1: Bayes with Covariance same for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure ~\ref{fig:data2g1} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2gaussian1}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of non linearly sepearble data with bayesian model with same covariance}
+                \label{fig:data2g1}
+            \end{figure}\\
+            We can visualize the decision boundary better by examining the contour plot and the linear Discriminant boundary. The test data is plotted, the contours of each class conditional probabilities are also plotted. The plot is Figure ~\ref{fig:data2c1}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2c1}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for non linear sepearble data with bayesian model with same covariance}
+                \label{fig:data2c1}
+            \end{figure}\\
+            As we can see, The shape of all the gaussians are similar. This is caused by the same covariance of each classes. As the gaussians are same in shape, only their mean difffer. So it gives us a linear discriminant function of which boundaries are shown.\\
+                        
+            \item \textbf{Case 2: Bayes with Covariance different for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g2} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2gaussian2}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of non linearly seperable data for bayesian model with different covariance}
+                \label{fig:data2g2}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot.The plot is Figure~\ref{fig:data2c2}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2c2}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for non linear sepearble data for bayesian model with different covariance}
+                \label{fig:data2c2}
+            \end{figure}\\
+            As we can see, The shape of all the gaussians are dissimilar as the covariance is different for each class. So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+
+            \item \textbf{Case 3: Naive Bayes with} $\bm{\Sigma}_k = \sigma_k^2\bm{I}$\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonals matrix with same elements, we expect a gaussian whose contours are circular. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g3} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2gaussian3}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of non linearly seperable data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:data2g3}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric circles in the contour plot. The plot is Figure~\ref{fig:data2c3}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2c3}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for non linear seperble data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:data2c3}
+            \end{figure}
+            As we can see, The shape of all the gaussians are symmetrical / circular contours.The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.\\
+
+            \item \textbf{Case 4: Naive Bayes with same covariance for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is same, we expect a linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g4} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2gaussian4}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of non linearly seperable data for Naive Bayes with same covariance}
+                \label{fig:data2g4}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data2c4}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2c4}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for non linear seperble data for Naive Bayes with different covariance}
+                \label{fig:data2c4}
+            \end{figure}
+            The covariance is same for each class, So it gives us a linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+
+            \item \textbf{Case 5: Naive Bayes with different covariance for all classes}\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is different, we expect a non linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g5} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2gaussian5}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of non linearly seperable data for Naive Bayes with different covariance}
+                \label{fig:data2g5}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data2c5}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data2c5}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for non linear seperble data for Naive Bayes with different covariance}
+                \label{fig:data2c5}
+            \end{figure}
+            The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+        \end{enumerate}
+
+    \FloatBarrier
+    \item \textbf{Overlapping Data with three classes}\\
+\end{enumerate}
+
+
+
+
+ % ============================== Content ends here
+\end{questions}
+% \begin{center}
+% \rule{.7\textwidth}{1pt}
+% \end{center}
+\end{document} 
