@@ -1,7 +1,7 @@
 % @Author: athul
 % @Date:   2014-09-15 12:11:31
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-09-25 19:26:42
+% @Last Modified time: 2014-09-25 23:11:26
 
 \documentclass[11pt,paper=a4,answers]{exam}
 \usepackage{graphicx,lastpage}
@@ -64,6 +64,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
 \begin{center}
 {\large \bfseries \par
 \Large Pattern Recognition Assignment 2 \\[2pt]
+\vspace{6pt}
 \small   \par}
 \end{center}
 \end{minipage}
@@ -73,7 +74,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
 \end{minipage}
 \par
 \noindent
-\uline{\today \hfill \normalsize\emph \hfill       Athul Vijayan (ED11B004) \& KIRAN KUMAR.G.R (AM14D405)}\\
+\uline{Group 12 \hfill \normalsize\emph \hfill       Athul Vijayan (ED11B004) \& KIRAN KUMAR.G.R (AM14D405)}\\
 \begin{questions}
 % ============================== Content starts here
 \question \textbf{Theory}\\
@@ -276,6 +277,8 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                         \item The closer the curve follows the left-hand border and then the top border of the ROC space, the more accurate the test.
                         \item The closer the curve comes to the 45-degree diagonal of the ROC space, the less accurate the classification.
                     \end{itemize}
+                \item \textbf{Detection error tradeoff (DET)}
+                    In the DET curve, plot consists of error rates on both axes, giving uniform treatment to both types of error, and use a scale for both axes which spreads out the plot. It better distinguishes different well performing systems. The DET curves are approximately straight lines, corresponding to normal likelihood distributions. The curves are limited to the lower left quadrant if the performance is good. The closer the curve comes to the x=-y diagonal of the DET plot, more random is the performance.
             \end{enumerate}
                 
     \end{enumerate}
@@ -851,7 +854,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
 
                     \end{tabular}
                     \caption{Confusion matrix for overlapping data, Algorithm 5}
-                    \label{tab:d2con}
+                    \label{tab:d3con5}
                 \endminipage\hfill
                 \minipage{0.25\textwidth}
                     \begin{tabular}{| l | c | c |}

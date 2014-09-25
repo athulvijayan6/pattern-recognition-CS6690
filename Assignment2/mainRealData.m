@@ -1,7 +1,7 @@
 % @Author: Athul Vijayan
 % @Date:   2014-09-22 18:14:58
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-09-25 19:18:10
+% @Last Modified time: 2014-09-25 23:44:09
 
 clear('all');
 clc
@@ -112,30 +112,30 @@ for mods = 1:5;
     idx = reshape(idx, length(x2),length(x1));
 
     % ====================== Plot gaussian starts =============================
-    figure; hold on;
-    view(3);
-    mu = model{1}{1}; Sigma = model{1}{2};
-    F = mvnpdf([X1(:) X2(:)],mu,Sigma);
-    F = reshape(F,length(x2),length(x1));
-    surf(x1,x2,F, idx);
+    % figure; hold on;
+    % view(3);
+    % mu = model{1}{1}; Sigma = model{1}{2};
+    % F = mvnpdf([X1(:) X2(:)],mu,Sigma);
+    % F = reshape(F,length(x2),length(x1));
+    % surf(x1,x2,F, idx);
 
-    mu = model{2}{1}; Sigma = model{2}{2};
-    F = mvnpdf([X1(:) X2(:)],mu,Sigma);
-    F = reshape(F,length(x2),length(x1));
-    surf(x1,x2,F, idx);
+    % mu = model{2}{1}; Sigma = model{2}{2};
+    % F = mvnpdf([X1(:) X2(:)],mu,Sigma);
+    % F = reshape(F,length(x2),length(x1));
+    % surf(x1,x2,F, idx);
 
-    mu = model{3}{1}; Sigma = model{3}{2};
-    F = mvnpdf([X1(:) X2(:)],mu,Sigma);
-    F = reshape(F,length(x2),length(x1));
-    surf(x1,x2,F, idx);
+    % mu = model{3}{1}; Sigma = model{3}{2};
+    % F = mvnpdf([X1(:) X2(:)],mu,Sigma);
+    % F = reshape(F,length(x2),length(x1));
+    % surf(x1,x2,F, idx);
 
-    set(get(gca,'XLabel'),'String','Feature 1');
-    set(get(gca,'YLabel'),'String','Feature 2');
-    set(get(gca,'ZLabel'),'String','scores');
-    set(get(gca,'Title'),'String',['Gaussian for each class with decision boundary for case ', num2str(mods)]);
-    annotation('textbox', [0.15 0.65 0.1 0.08], 'String', {'Red --> Class 1', 'Green --> Class 2', 'Blue --> Class 3'}, 'FitBoxToText','on');
-    map = [1 0 0; 0 1 0; 0 0 1];
-    colormap(map);
+    % set(get(gca,'XLabel'),'String','Feature 1');
+    % set(get(gca,'YLabel'),'String','Feature 2');
+    % set(get(gca,'ZLabel'),'String','scores');
+    % set(get(gca,'Title'),'String',['Gaussian for each class with decision boundary for case ', num2str(mods)]);
+    % annotation('textbox', [0.15 0.65 0.1 0.08], 'String', {'Red --> Class 1', 'Green --> Class 2', 'Blue --> Class 3'}, 'FitBoxToText','on');
+    % map = [1 0 0; 0 1 0; 0 0 1];
+    % colormap(map);
 
     % ====================== Plot gaussian ends =============================
 
@@ -189,32 +189,32 @@ for mods = 1:5;
 
     % % <<=============================Performance eval start ===============
 
-    % classLabels = BayesianClassify(model, testData(:,1:end-1));
-    % k = length(unique(testData(:, end))); % number of classes
+    classLabels = BayesianClassify(model, testData(:,1:end-1));
+    k = length(unique(testData(:, end))); % number of classes
 
-    % trueClass=testData(:,end);
-    % predClass=classLabels(:,1);
+    trueClass=testData(:,end);
+    predClass=classLabels(:,1);
 
-    % [C,or]= confusionmat(trueClass, predClass);
+    [C,or]= confusionmat(trueClass, predClass);
 
-    % printmat(C, 'Confution Matrix', 'ActCLASS1 CLASS2 CLASS3', 'PredCLASS1 CLASS2 CLASS3' );
-    % Accuracy=(sum(diag(C)))/(sum(sum(C)))*100;
-    % disp('ACCURACY(%)=');disp(Accuracy);
+    printmat(C, 'Confution Matrix', 'ActCLASS1 CLASS2 CLASS3', 'PredCLASS1 CLASS2 CLASS3' );
+    Accuracy=(sum(diag(C)))/(sum(sum(C)))*100;
+    disp('ACCURACY(%)=');disp(Accuracy);
 
-    % D=C;D(1:k+1:k*k) = 0;
-    % for i=1:k
-    %     Pclass(i)=C(i,i)/sum(C(i,:));
-    %     IError(i)=sum(D(i,:))/sum(C(i,:));
-    %     EError(i)=sum(D(:,i))/sum(C(:,i));
-    % end
+    D=C;D(1:k+1:k*k) = 0;
+    for i=1:k
+        Pclass(i)=C(i,i)/sum(C(i,:));
+        IError(i)=sum(D(i,:))/sum(C(i,:));
+        EError(i)=sum(D(:,i))/sum(C(:,i));
+    end
 
-    % PE=horzcat(Pclass',IError',EError');
-    % printmat(PE, 'Precision Error', 'CLASS1 CLASS2 CLASS3', 'Precision inclusionEr exclusionEr' );
+    PE=horzcat(Pclass',IError',EError');
+    printmat(PE, 'Precision Error', 'CLASS1 CLASS2 CLASS3', 'Precision inclusionEr exclusionEr' );
 
-    % for i=1:k
-    %     z(:,i) = ((classLabels(:,i+1))-mean(classLabels(:,i+1)))/std(classLabels(:,i+1));
-    % end
-    % colors = ['r', 'g', 'b', 'm', 'c'];
+    for i=1:k
+        z(:,i) = ((classLabels(:,i+1))-mean(classLabels(:,i+1)))/std(classLabels(:,i+1));
+    end
+    colors = ['r', 'g', 'b', 'm', 'c'];
 
     % % ============================== DET and ROC for each class =======================
     % for i=1:k
@@ -229,7 +229,7 @@ for mods = 1:5;
  
     % for i=1:k
     %     figure(k+i); hold on;
-    %     targetScores = z(find(classLabels(:, 1) == i), i);
+    %     targetScores = z(find(trueClass(:, 1) == i), i);
     %     nonTargetScores = setdiff(z(:, i), targetScores);
     %     [f1, g1]=Compute_DET(targetScores, nonTargetScores);
     %     Plot_DET(f1,g1, colors(mods));
@@ -241,30 +241,30 @@ for mods = 1:5;
     % % ============================== DET and ROC for each class ends =======================
 
     % ======================DET and ROC for each algorithm =============
-    % figure(mods);hold on;
-    % for i=1:k
-    %     [X(:,i),Y(:,i)] = perfcurve(trueClass, z(:,i),i);
-    %     p = plot(X(:,i),Y(:,i));
-    %     set(p, 'Color', colors(i)); 
-    % end
-    % title(['ROC Curves for Algorithm ', num2str(mods)]);
-    % xlabel('False Positive rate');ylabel('True positive rate');
-    % legend('Class 1', 'Class 2', 'Class 3','Location','NorthEastOutside');
-    % hold off
+    figure(mods);hold on;
+    for i=1:k
+        [X(:,i),Y(:,i)] = perfcurve(trueClass, z(:,i),i);
+        p = plot(X(:,i),Y(:,i));
+        set(p, 'Color', colors(i)); 
+    end
+    title(['ROC Curves for Algorithm ', num2str(mods)]);
+    xlabel('False Positive rate');ylabel('True positive rate');
+    legend('Class 1', 'Class 2', 'Class 3','Location','NorthEastOutside');
+    hold off
  
-    % figure(5+mods); hold on;
-    % for i=1:k
-    %     targetScores = z(find(classLabels(:, 1) == i), i);
-    %     nonTargetScores = setdiff(z(:, i), targetScores);
-    %     [f1, g1]=Compute_DET(targetScores, nonTargetScores);
-    %     Plot_DET(f1,g1, colors(i));
+    figure(5+mods); hold on;
+    for i=1:k
+        targetScores = z(find(trueClass(:, 1) == i), i);
+        nonTargetScores = setdiff(z(:, i), targetScores);
+        [f1, g1]=Compute_DET(targetScores, nonTargetScores);
+        Plot_DET(f1,g1, colors(i));
         
-    % end
-    % set(get(gca,'XLabel'),'String','False Positive Rate');
-    % set(get(gca,'YLabel'),'String','Missed detection rate');
-    % title(['Showing DET curves for Algorithm ', num2str(mods)]);
-    % legend('Class 1', 'Class 2', 'Class 3','Location','NorthEastOutside');
-    % hold off
+    end
+    set(get(gca,'XLabel'),'String','False Positive Rate');
+    set(get(gca,'YLabel'),'String','Missed detection rate');
+    title(['Showing DET curves for Algorithm ', num2str(mods)]);
+    legend('Class 1', 'Class 2', 'Class 3','Location','NorthEastOutside');
+    hold off
     % ======================DET and ROC for each algorithm ends =============
 
     % <<=============================Performance eval ends ===============

@@ -1,7 +1,7 @@
 % @Author: Athul Vijayan
 % @Date:   2014-09-15 17:49:21
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-09-25 16:35:24
+% @Last Modified time: 2014-09-25 23:39:14
 clear all
 clc
 
@@ -177,7 +177,7 @@ for mods=1:5
  
     for i=1:k
         figure(k+i); hold on;
-        targetScores = z(find(classLabels(:, 1) == i), i);
+        targetScores = z(find(trueClass(:, 1) == i), i);
         nonTargetScores = setdiff(z(:, i), targetScores);
         [f1, g1]=Compute_DET(targetScores, nonTargetScores);
         Plot_DET(f1,g1, colors(mods));
@@ -202,12 +202,14 @@ for mods=1:5
  
     % figure(5+mods); hold on;
     % for i=1:k
-    %     targetScores = z(find(classLabels(:, 1) == i), i);
+    %     targetScores = z(find(trueClass(:, 1) == i), i);
     %     nonTargetScores = setdiff(z(:, i), targetScores);
     %     [f1, g1]=Compute_DET(targetScores, nonTargetScores);
     %     Plot_DET(f1,g1, colors(i));
-        
+    %     clear('f1', 'g1');
     % end
+
+
     % set(get(gca,'XLabel'),'String','False Positive Rate');
     % set(get(gca,'YLabel'),'String','Missed detection rate');
     % title(['Showing DET curves for Algorithm ', num2str(mods)]);
