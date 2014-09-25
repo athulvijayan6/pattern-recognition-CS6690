@@ -1,14 +1,17 @@
 % @Author: athul
 % @Date:   2014-09-15 12:11:31
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-09-22 00:45:07
+% @Last Modified time: 2014-09-25 19:26:42
 
 \documentclass[11pt,paper=a4,answers]{exam}
 \usepackage{graphicx,lastpage}
+\usepackage{subfig}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
 \usepackage{upgreek}
 \usepackage{float}
 \usepackage{placeins}
-\usepackage{hyperref}
+\usepackage[bookmarks]{hyperref}
 \usepackage{censor}
 \usepackage{amsmath}
 \usepackage{amssymb, amsthm}
@@ -16,6 +19,9 @@
 \usepackage{bm}
 \usepackage{caption}
 \usepackage{enumerate}
+
+\newcommand{\cb}[1]{{\cellcolor{black! 15 }$ #1$}}
+\newcommand{\cw}[1]{{\cellcolor{black! 35 }$ \color{white} #1$}}
 \censorruledepth=-.2ex
 \censorruleheight=.1ex
 \hyphenpenalty 10000
@@ -35,7 +41,7 @@ top=0.7in,bottom=1in,headsep=.5\baselineskip]{geometry}
 \ifcontinuation{\footnotesize continues\ldots}{}%
  }
 \runningheader{\footnotesize \today}
-{\footnotesize Machine Learning - Pattern Recognition}
+{\footnotesize Pattern Recognition}
 {\footnotesize Page \thepage\ of \numpages}
 \footrule
 \footer{\footnotesize}
@@ -57,7 +63,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
 \begin{minipage}[r]{.68\textwidth}%
 \begin{center}
 {\large \bfseries \par
-\Large Machine Learning Notes \\[2pt]
+\Large Pattern Recognition Assignment 2 \\[2pt]
 \small   \par}
 \end{center}
 \end{minipage}
@@ -67,7 +73,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
 \end{minipage}
 \par
 \noindent
-\uline{\today \hfill \normalsize\emph \hfill       Athul Vijayan}\\
+\uline{\today \hfill \normalsize\emph \hfill       Athul Vijayan (ED11B004) \& KIRAN KUMAR.G.R (AM14D405)}\\
 \begin{questions}
 % ============================== Content starts here
 \question \textbf{Theory}\\
@@ -248,6 +254,30 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \end{cases} }$$
                 So the best estimate has cumulative variance of each feature along its diagonals and zero everywhere else.
             \end{itemize}
+            \item \textbf{Performance evaluation methods}
+            \begin{enumerate}
+                \item \textbf{Confusion matrix and Performance metrics}\\
+                    Confusion matrix or an error matrix is a specific table layout that allows visualization of the performance of an algorithm. The structure of the matrix is as follows, 
+                    \begin{itemize}
+                        \item Rows correspond to classes in the test set.
+                        \item Columns correspond to classes in the classification result.
+                        \item The diagonal elements in the matrix represent the number of correctly classified data points of each class, i.e. the number of data points with a certain class name that actually obtained the same class name during classification.
+                        \item The off-diagonal elements represent misclassified data points or the classification errors, i.e. the number of data points that ended up in another class during classification. 
+                        \item Off-diagonal row elements represent data points of a certain class which were excluded from the respective class during classification. Such errors are known as errors of omission or exclusion. It is the ratio sum of off diagonal row elements to the sum total off the row.
+                        \item Off-diagonal column elements represent data points of other classes that were included in a certain classification class. Such errors are known as errors of commission or inclusion. It is the ratio sum of off diagonal column elements to the sum total off the column.
+                    \end{itemize}
+                    
+                    \textbf{Accuracy} is the fraction of correctly classified data points with respect to all data points of the given class. It is ratio of sum of the diagonal elements to the grand total of the matrix elements.\\
+                    \textbf{Precision} is the proportion of the predicted positive cases that were correct. It is the ratio of the corresponding diagonal element of the class to the sum the off-diagonal column elements.
+                \item \textbf{Receiver Operating Characteristics (ROC)}\\
+                    A receiver operating characteristics (ROC) curve is a technique used for visualizing performance of classifiers. ROC graphs are two-dimensional graphs in which True Positive rate is plotted along the Y axis and False Positive rate is plotted on the X axis. An ROC graph depicts relative trade-offs between true positives and false positives. Interpretations from ROC curves are,
+                    \begin{itemize}
+                        \item It shows the tradeoff between sensitivity (True positive rate) and class specificity (any increase in sensitivity will be accompanied by a decrease in specificity).
+                        \item The closer the curve follows the left-hand border and then the top border of the ROC space, the more accurate the test.
+                        \item The closer the curve comes to the 45-degree diagonal of the ROC space, the less accurate the classification.
+                    \end{itemize}
+            \end{enumerate}
+                
     \end{enumerate}
 \newpage
 \question \textbf{Implementation And results}
@@ -261,10 +291,10 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             \caption{Scatter plot of Linearly sepearble data}
             \label{fig:scatterData1}
         \end{figure}\\
-        As it is evident from visual inspection, the data looks clean in the sense that it does not have outliers or missing feature etc.. So we will apply our algorithms to this data with different choices of covariance. And draw inferences. As the each classes are well seperated, we can expect a good accuracy for our model.
+        As it is evident from visual inspection, the data looks clean in the sense that it does not have much outliers or missing feature etc.. So we will apply our algorithms to this data with different choices of covariance. As the each classes are well seperated, we can expect a good accuracy for our model.
         \begin{enumerate}
             \item \textbf{Case 1: Bayes with Covariance same for all classes}\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure ~\ref{fig:data1g1} shows the plot.\\
+            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure ~\ref{fig:data1g1} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1gaussian1}
@@ -272,7 +302,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \caption{Gaussian pdf of posterior probability showing decision boundary of linearly sepearble data with bayesian model with same covariance}
                 \label{fig:data1g1}
             \end{figure}\\
-            We can visualize the decision boundary better by examining the contour plot and the Discriminant boundary. The test data is plotted, the contours of each class conditional probabilities are also plotted. The plot is Figure ~\ref{fig:data1c1}.\\ 
+            We can visualize the decision boundary better by examining the contour plot and the Discriminant boundary. The test data is plotted, the contours of each class conditional probabilities are also plotted. The plot is Figure ~\ref{fig:data1c1}.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1c1}
@@ -284,7 +314,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             The decision boundary passes through the midpoint of line segment joining the means of any pair of classes. This is because of equal prior probability.
             
             \item \textbf{Case 2: Bayes with Covariance different for all classes}\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g2} shows the plot.\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g2} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1gaussian2}
@@ -292,7 +322,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for bayesian model with different covariance}
                 \label{fig:data1g2}
             \end{figure}\\
-            Now the decision boundary can be seen better in a contour plot.The plot is Figure~\ref{fig:data1c2}.\\ 
+            Now the decision boundary can be seen better in a contour plot.The plot is Figure~\ref{fig:data1c2}.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1c2}
@@ -303,7 +333,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             As we can see, The shape of all the gaussians are dissimilar as the covariance is different for each class. So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
 
             \item \textbf{Case 3: Naive Bayes with} $\bm{\Sigma}_k = \sigma_k^2\bm{I}$\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonals matrix with same elements, we expect a gaussian whose contours are circular. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g3} shows the plot.
+            We expect a symmetric gaussian. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g3} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1gaussian3}
@@ -311,7 +341,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
                 \label{fig:data1g3}
             \end{figure}\\
-            Now the decision boundary can be seen better in a contour plot. We expect concentric circles in the contour plot. The plot is Figure~\ref{fig:data1c3}.\\ 
+            We expect concentric circles in the contour plot. The plot is Figure~\ref{fig:data1c3}.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1c3}
@@ -322,7 +352,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             As we can see, The shape of all the gaussians are symmetrical / circular contours.The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.\\
 
             \item \textbf{Case 4: Naive Bayes with same covariance for all classes}\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is same, we expect a linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g4} shows the plot.
+            As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is same, we expect a linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g4} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1gaussian4}
@@ -330,7 +360,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for Naive Bayes with same covariance}
                 \label{fig:data1g4}
             \end{figure}\\
-            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data1c4}.\\ 
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data1c4}.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1c4}
@@ -341,7 +371,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             The covariance is same for each class, So it gives us a linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
 
             \item \textbf{Case 5: Naive Bayes with different covariance for all classes}\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is different, we expect a non linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g5} shows the plot.
+            Since covariance of each class is different, we expect a non linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data1g5} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1gaussian5}
@@ -349,7 +379,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \caption{Gaussian pdf of posterior probability showing decision boundary of linearly seperable data for Naive Bayes with different covariance}
                 \label{fig:data1g5}
             \end{figure}\\
-            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data1c5}.\\ 
+            Now the decision boundary can be seen better in a contour plot. The plot is Figure~\ref{fig:data1c5}.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data1c5}
@@ -358,6 +388,44 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \label{fig:data1c5}
             \end{figure}
             The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+            \item \textbf{Performance evaluation}
+                The confusion matrix and all the performance metrics are same for every algorithm we used. It is given as:
+                \begin{table}[ht]
+                    \centering
+                    \minipage{0.75\textwidth}
+                        \begin{tabular}{c | c c c c | c | c |}
+                            \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                             & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                            \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                            & Class 1       & \cw{150}  & \cb{0}    & \cb{0}    & \cb{150}  &\cb{0}\\ 
+                            & Class 2       & \cb{0}    & \cw{150}  & \cb{0}    & \cb{150}  &\cb{0}\\ 
+                            & Class 3       & \cb{0}    & \cb{0}    & \cw{150}  & \cb{150}  &\cb{0}\\ 
+                            \cline{2-7}
+                            & Total         & \cb{150}  & \cb{150}  & \cb{150}  & \cb{450}  &\cb{0}\\ 
+                            \cline{2-7}
+                            & Excl. Error   & \cb{0}    & \cb{0}    & \cb{0}    & \cb{0}    &\cb{}\\ 
+                            \cline{2-7}
+                        \end{tabular}
+                        \caption{Confusion matrix for Linearly seperable data, All Algorithm}
+                    \endminipage\hfill
+                    \minipage{0.25\textwidth}
+                        \begin{tabular}{| l | c | c |}
+                            \hline
+                            & Precision & Accuracy\\
+                            \hline
+                            Class 1 & 1.00 & \\
+                            \cline{1-2}
+                            Class 2 & 1.00 & 100 \%\\
+                            \cline{1-2}
+                            Class 3 & 1.00 & \\
+                            \hline
+                        \end{tabular}
+                        \caption{Performance metric}
+                    \endminipage\hfill
+                    \label{tab:confmat}
+                \end{table}\\
+                And ROC curve is not necessary in this case since all algorithms give same full accuracy.
         \end{enumerate}
 
     \FloatBarrier
@@ -370,7 +438,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             \caption{Scatter plot of Linearly sepearble data}
             \label{fig:scatterData2}
         \end{figure}\\
-        As it is evident from visual inspection, the data looks clean in the sense that it does not have outliers or missing feature etc..But we can tell from the scatterplot that linear discriminants will perform less efficient than non linear discriminants. Since there are less overlapping data, we can tell that accuracy will be good generally.
+        Since there are less overlapping data, we can tell that accuracy will be good generally.
         \begin{enumerate}
             \item \textbf{Case 1: Bayes with Covariance same for all classes}\\
             We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure ~\ref{fig:data2g1} shows the plot.\\
@@ -389,10 +457,10 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \caption{Contour plots and test data points showing decision boundary for non linear sepearble data with bayesian model with same covariance}
                 \label{fig:data2c1}
             \end{figure}\\
-            As we can see, The shape of all the gaussians are similar. This is caused by the same covariance of each classes. As the gaussians are same in shape, only their mean difffer. So it gives us a linear discriminant function of which boundaries are shown.\\
+            It gives us a linear discriminant function of which boundaries are shown.\\
                         
             \item \textbf{Case 2: Bayes with Covariance different for all classes}\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. We constructed the gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g2} shows the plot.\\
+            gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g2} shows the plot.\\
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data2gaussian2}
@@ -408,10 +476,10 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \caption{Contour plots and test data points showing decision boundary for non linear sepearble data for bayesian model with different covariance}
                 \label{fig:data2c2}
             \end{figure}\\
-            As we can see, The shape of all the gaussians are dissimilar as the covariance is different for each class. So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+            It gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
 
             \item \textbf{Case 3: Naive Bayes with} $\bm{\Sigma}_k = \sigma_k^2\bm{I}$\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonals matrix with same elements, we expect a gaussian whose contours are circular. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g3} shows the plot.
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g3} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data2gaussian3}
@@ -430,7 +498,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             As we can see, The shape of all the gaussians are symmetrical / circular contours.The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.\\
 
             \item \textbf{Case 4: Naive Bayes with same covariance for all classes}\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is same, we expect a linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g4} shows the plot.
+            Again, since covariance of each class is same, we expect a linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g4} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data2gaussian4}
@@ -449,7 +517,7 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
             The covariance is same for each class, So it gives us a linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
 
             \item \textbf{Case 5: Naive Bayes with different covariance for all classes}\\
-            We have used the estimates for optimum mean and covariance as we derived earlier. As the covariance is a diagonal matrix with arbitrary elements, we expect a gaussian whose contours are elliptical. Again, since covariance of each class is different, we expect a non linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g5} shows the plot.
+            we expect a non linear boundary. Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data2g5} shows the plot.
             \begin{figure}[ht]
                 \centering
                 \includegraphics[width=\textwidth]{data2gaussian5}
@@ -466,14 +534,748 @@ on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go  
                 \label{fig:data2c5}
             \end{figure}
             The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown. As the data set is well seperated, the predictor gives a good accuracy.
+            \item \textbf{Performance evaluation}
+                The confusion matrix and all the performance metrics are same for every algorithm we used. It is given in Table ~\ref{tab:d2con}:
+                \begin{table}[ht]
+                    \centering
+                    \minipage{0.75\textwidth}
+                        \begin{tabular}{c | c c c c | c | c |}
+                            \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                             & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                            \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                            & Class 1       & \cw{150}  & \cb{0}    & \cb{0}    & \cb{150}  &\cb{0}\\ 
+                            & Class 2       & \cb{0}    & \cw{150}  & \cb{0}    & \cb{150}  &\cb{0}\\ 
+                            & Class 3       & \cb{0}    & \cb{0}    & \cw{150}  & \cb{150}  &\cb{0}\\ 
+                            \cline{2-7}
+                            & Total         & \cb{150}  & \cb{150}  & \cb{150}  & \cb{450}  &\cb{0}\\ 
+                            \cline{2-7}
+                            & Excl. Error   & \cb{0}    & \cb{0}    & \cb{0}    & \cb{0}    &\cb{}\\ 
+                            \cline{2-7}
+
+                        \end{tabular}
+                        \caption{Confusion matrix for Non Linearly seperable data, All Algorithm}
+                        \label{tab:d2con}
+                    \endminipage\hfill
+                    \minipage{0.25\textwidth}
+                        \begin{tabular}{| l | c | c |}
+                            \hline
+                            & Precision & Accuracy\\
+                            \hline
+                            Class 1 & 1.00 & \\
+                            \cline{1-2}
+                            Class 2 & 1.00 & 100 \%\\
+                            \cline{1-2}
+                            Class 3 & 1.00 & \\
+                            \hline
+                        \end{tabular}
+                        \caption{Performance metric}
+                    \endminipage\hfill
+                    
+                \end{table}\\
+                And ROC curve is not necessary in this case since all algorithms give same full accuracy.
         \end{enumerate}
-
     \FloatBarrier
+
     \item \textbf{Overlapping Data with three classes}\\
+        As always, first step is to visualize the data.Lets scatterplot the data with different markers for each class. The scatterplot is given in Figure~\ref{fig:scatterData3}
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=\textwidth]{data3}
+            \vspace{-30pt}
+            \caption{Scatter plot of Overlapping data}
+            \label{fig:scatterData3}
+        \end{figure}\\
+        As we can see there is no clear boundary seperating each class, the accuracy will be less than than previous cases. But it is evident that majority of data belonging to each class is at the centre. The number of data points which are in the boundary are less. Even though data is overlapping, there aren't much outliers/ missing features. So we skip the preprocessing of data.\\
+        Now lets make classification models for the data and analyse the results.
+        \begin{enumerate}
+            \item \textbf{Case 1: Bayes with Covariance same for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure ~\ref{fig:data3g1} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3gaussian1}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of overlapping data with bayesian model with same covariance}
+                \label{fig:data3g1}
+            \end{figure}\\
+            Note the gaussians are not well seperated like previous case, which is expected of overlapping data.We can visualize the decision boundary better by examining the contour plot and the linear Discriminant boundary. The test data is plotted, the contours of each class conditional probabilities are also plotted. The plot is Figure ~\ref{fig:data3c1}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3c1}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for non Overlapping data with bayesian model with same covariance}
+                \label{fig:data3c1}
+            \end{figure}\\
+            As the gaussians are same in shape, only their mean difffer. So it gives us a linear discriminant function of which boundaries are shown. The contour lines are crossing each other because of overlapping data.\\
+            The performance matrix is given in Table~\ref{tab:d3con1}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{144}  & \cb{3}    & \cb{3}    & \cb{150}  &\cb{0.04}\\ 
+                        & Class 2       & \cb{1}    & \cw{149}  & \cb{0}    & \cb{150}  &\cb{0.0066}\\ 
+                        & Class 3       & \cb{1}    & \cb{0}    & \cw{149}  & \cb{150}  &\cb{0.006}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{146}  & \cb{152}  & \cb{152}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.013}    & \cb{0.019}    & \cb{0.019}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Overlapping data, Case 1 Algorithm}
+                    \label{tab:d3con1}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.96 & \\
+                        \cline{1-2}
+                        Class 2 & 0.993 & 98.22 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.993 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+                        
+            \item \textbf{Case 2: Bayes with Covariance different for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data3g2} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3gaussian2}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of overlapping data for bayesian model with different covariance}
+                \label{fig:data3g2}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot.The plot is Figure~\ref{fig:data3c2}.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3c2}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for overlapping data for bayesian model with different covariance}
+                \label{fig:data3c2}
+            \end{figure}\\
+            As the data set is overlapping, the classification accuracy is expected to be less than previous cases.
+            The performance matrix is given in Table~\ref{tab:d3con2}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{147}  & \cb{1}    & \cb{2}    & \cb{150}  &\cb{0.02}\\ 
+                        & Class 2       & \cb{2}    & \cw{148}  & \cb{0}    & \cb{150}  &\cb{0.0133}\\ 
+                        & Class 3       & \cb{1}    & \cb{0}    & \cw{149}  & \cb{150}  &\cb{0.006}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{150}  & \cb{149}  & \cb{151}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.02}    & \cb{0.0067}    & \cb{0.013}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Overlapping data, Case 2 Algorithm}
+                    \label{tab:d3con2}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.98 & \\
+                        \cline{1-2}
+                        Class 2 & 0.986 & 98.66 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.993 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+
+            \item \textbf{Case 3: Naive Bayes with} $\bm{\Sigma}_k = \sigma_k^2\bm{I}$\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data3g3} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3gaussian3}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of overlapping data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:data3g3}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric circles in the contour plot. The plot is Figure~\ref{fig:data3c3}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3c3}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for overlapping data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:data3c3}
+            \end{figure}
+            As we can see, The shape of all the gaussians are symmetrical / circular contours.The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown.\\
+            The performance matrix is given in Table~\ref{tab:d3con3}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{146}  & \cb{2}    & \cb{2}    & \cb{150}  &\cb{0.02}\\ 
+                        & Class 2       & \cb{2}    & \cw{148}  & \cb{0}    & \cb{150}  &\cb{0.0133}\\ 
+                        & Class 3       & \cb{1}    & \cb{0}    & \cw{149}  & \cb{150}  &\cb{0.006}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{149}  & \cb{150}  & \cb{151}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.02}    & \cb{0.013}    & \cb{0.013}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Overlapping data, Case 3 Algorithm}
+                    \label{tab:d3con3}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.973 & \\
+                        \cline{1-2}
+                        Class 2 & 0.986 & 98.44 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.993 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+
+            \item \textbf{Case 4: Naive Bayes with same covariance for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data3g4} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3gaussian4}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of overlapping data for Naive Bayes with same covariance}
+                \label{fig:data3g4}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data3c4}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3c4}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for overlapping data for Naive Bayes with different covariance}
+                \label{fig:data3c4}
+            \end{figure}
+            The covariance is same for each class, So it gives us a linear discriminant function of which boundaries are shown.
+            The performance matrix is given in Table~\ref{tab:d3con4}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{145}  & \cb{3}    & \cb{2}    & \cb{150}  &\cb{0.033}\\ 
+                        & Class 2       & \cb{1}    & \cw{149}  & \cb{0}    & \cb{150}  &\cb{0.066}\\ 
+                        & Class 3       & \cb{1}    & \cb{0}    & \cw{149}  & \cb{150}  &\cb{0.006}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{147}  & \cb{152}  & \cb{151}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.013}    & \cb{0.019}    & \cb{0.013}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Overlapping data, Case 4 Algorithm}
+                    \label{tab:d3con4}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.966 & \\
+                        \cline{1-2}
+                        Class 2 & 0.993 & 98.44 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.993 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+
+            \item \textbf{Case 5: Naive Bayes with different covariance for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:data3g5} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3gaussian5}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of overlapping data for Naive Bayes with different covariance}
+                \label{fig:data3g5}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:data3c5}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{data3c5}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for non linear seperble data for Naive Bayes with different covariance}
+                \label{fig:data3c5}
+            \end{figure}
+            The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown.
+            The confusion matrix and all the performance metrics are same for every algorithm we used. It is given in Table ~\ref{tab:d3con5}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{148}  & \cb{1}    & \cb{1}    & \cb{150}  &\cb{0.013}\\ 
+                        & Class 2       & \cb{2}    & \cw{148}  & \cb{0}    & \cb{150}  &\cb{0.013}\\ 
+                        & Class 3       & \cb{1}    & \cb{0}    & \cw{149}  & \cb{150}  &\cb{0.066}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{151}  & \cb{149}  & \cb{150}  & \cb{}  &\cb{0}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.0198}    & \cb{0.0061}    & \cb{0.0067}    & \cb{0}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for overlapping data, Algorithm 5}
+                    \label{tab:d2con}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.9866 & \\
+                        \cline{1-2}
+                        Class 2 & 0.9866 & 98.89 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.993 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+            \item \textbf{Performance evaluation}
+                Now with ROC and DET curves, we  can evaluate the performance. There are two possibilities, either I can see the performance of each algorithm in a particular class or i can take an algorithm and see which class achieved best performance for that model.\\
+                We plot both cases;
+                Table~\ref{tab:d3perfClasswise} shows ROC and DET curve for each algorithm in each class.\\
+                \begin{table}[ht]
+                    \begin{tabular}{ccc}
+                        \subfloat[Class 1 ROC]{\includegraphics[width = 2in]{d3rocCl1}} &
+                        \subfloat[Class 2 ROC]{\includegraphics[width = 2in]{d3rocCl2}} &
+                        \subfloat[Class 3 ROC]{\includegraphics[width = 2in]{d3rocCl3}} \\
+
+                        \subfloat[Class 1 DET]{\includegraphics[width = 2in]{d3detCl1}} &
+                        \subfloat[Class 2 DET]{\includegraphics[width = 2in]{d3detCl2}} &
+                        \subfloat[Class 3 DET]{\includegraphics[width = 2in]{d3detCl3}} 
+                    \end{tabular}
+                    \caption{For overlapping data, DET and ROC curves for each class}
+                    \label{tab:d3perfClasswise}
+                \end{table}
+                Table~\ref{tab:d3perfAlgowise} shows difference in performance of binary classification of each class for a particular algorithm.\\
+                \begin{table}[ht]
+                    \begin{tabular}{ccc}
+                        \subfloat[Algo 1 ROC]{\includegraphics[width = 2in]{d3rocAl1}} &
+                        \subfloat[Algo 2 ROC]{\includegraphics[width = 2in]{d3rocAl2}} &
+                        \subfloat[Algo 3 ROC]{\includegraphics[width = 2in]{d3rocAl3}} \\
+                        \subfloat[Algo 4 ROC]{\includegraphics[width = 2in]{d3rocAl4}} &
+
+                        \subfloat[Algo 5 ROC]{\includegraphics[width = 2in]{d3rocAl5}} &
+                        \subfloat[Algo 1 DET]{\includegraphics[width = 2in]{d3detAl1}} \\
+                        \subfloat[Algo 2 DET]{\includegraphics[width = 2in]{d3detAl2}} &
+                        \subfloat[Algo 3 DET]{\includegraphics[width = 2in]{d3detAl3}} &
+
+                        \subfloat[Algo 4 DET]{\includegraphics[width = 2in]{d3detAl4}} \\
+                        \subfloat[Algo 5 DET]{\includegraphics[width = 2in]{d3detAl5}} &
+                    \end{tabular}
+                    \caption{For overlapping data, DET and ROC curves for each class}
+                    \label{tab:d3perfAlgowise}
+                \end{table}
+        \end{enumerate}    
+    \FloatBarrier
+
+    \item \label{Real world data} \textbf{Real world data}\\
+        As always, first lets do a scatterplot of data and draw some inferences. The scatterplot is Figure~\ref{fig:Rdata}
+        \begin{figure}[ht]
+            \centering
+            \includegraphics[width=0.8\textwidth]{realData}
+            \caption{The scatterplot of real world data showing different classes}
+            \label{fig:Rdata}        
+        \end{figure}\\
+        \FloatBarrier
+        We can observe from data that:
+        \begin{itemize}
+            \item The data contains outliers. If we proceed without removing outliers, our mean calculation might get currupt since outliers can change mean significantly.
+            \item The data has missing features, we can see it from the points lying on the left axis.
+            \item The class 1 and class 2 are overlapping. It will be hard to discriminate between these two classes.
+            \item For class 1 and class 2, there seems to be an upper bound for Feature 2 .
+        \end{itemize}
+        \textbf{Outliers}\\
+        It is important to remove outliers from the training data so that the outliers do not affect the parameters of the model much, in our case mean and covariance. 
+        Lets draw the Boxplot for each class in each feature. Figure~\ref{rdatabp} shows box plots.\\
+        \begin{figure}[htb]
+            \minipage{0.32\textwidth}
+              \includegraphics[width=\linewidth]{rbp1}
+              \caption{Boxplot for Class 1 data}\label{rdatabp}
+            \endminipage\hfill
+            \minipage{0.32\textwidth}
+              \includegraphics[width=\linewidth]{rbp2}
+              \caption{Boxplot for Class 2 data}
+            \endminipage\hfill
+            \minipage{0.32\textwidth}%
+              \includegraphics[width=\linewidth]{rbp3}
+              \caption{Boxplot for Class 3 data}
+            \endminipage
+        \end{figure}
+        It is evident from the data that there are outliers.
+        Unlike univariate, it is hard to classify outliers in Multivariate. In Multivariate case the distance from the mean to a point is measured using \textit{Mahalanobis Distance}. Distribution of Mahalanobis distance is given by chi squared distribution of $d$ Degrees of freedoms where $d$ is the feature dimension.\\
+        The (squared) Mahalanobis Distance is given by $\mathrm{MD}_i = (\vec{x} - \bm{\mu})^T \bm{\Sigma}^{-1}(\vec{x} - \bm{\mu})$\\
+        A point is said to be a outlier if the (squared) Mahalanobis distance is greater than $inv\left(\sqrt{\mathcal{X}_d ^2 (0.975)}\right)$ where $\mathcal{X}_d ^2$ is chi squared distribution of DOF $d$.
+
+        Once they are detected, we use the attribute mean to fill in the feature which is detected as outlier.
+        The figures~\ref{scatterOL} shows the scatterplot of training data after and before removing outliers.
+        \begin{figure}[htb]
+            \minipage{0.4\textwidth}
+              \includegraphics[width=\linewidth]{rbpOL}
+              \caption{Scatterplot of training data before outlier removal}\label{scatterOL}
+            \endminipage\hfill
+            \minipage{0.4\textwidth}
+              \includegraphics[width=\linewidth]{rbpwithoutOL}
+              \caption{Scatterplot of training data after outlier removal}
+            \endminipage\hfill
+        \end{figure}
+
+        Now with the cleaned training data, we make 5 algorithms.
+        \begin{enumerate}
+            \item \textbf{Case 1: Bayes with Covariance same for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure ~\ref{fig:rdg1} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdgaussian1}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of Real data with bayesian model with same covariance}
+                \label{fig:rdg1}
+            \end{figure}\\
+            The test data is plotted, the contours of each class conditional probabilities are also plotted. The plot is Figure ~\ref{fig:rdc1}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdc1}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for real data with bayesian model with same covariance}
+                \label{fig:rdc1}
+            \end{figure}\\
+            As the gaussians are same in shape, only their mean difffer. So it gives us a linear discriminant function of which boundaries are shown. The contour lines are crossing each other because of overlapping data.\\
+            The performance matrix is given in Table~\ref{tab:rdcon1}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{1614}  & \cb{225}    & \cb{0}    & \cb{1839}  &\cb{0.122}\\ 
+                        & Class 2       & \cb{175}   & \cw{1691}    & \cb{0}    & \cb{1866}  &\cb{0.093}\\ 
+                        & Class 3       & \cb{8}     & \cb{15}      & \cw{2268}  & \cb{2291}  &\cb{0.01}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{1797}  & \cb{1931}  & \cb{2268}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.101}    & \cb{0.124}    & \cb{0}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Real, Case 1 Algorithm}
+                    \label{tab:rdcon1}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.877 & \\
+                        \cline{1-2}
+                        Class 2 & 0.906 & 92.95 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.989 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+                        
+            \item \textbf{Case 2: Bayes with Covariance different for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:rdg2} shows the plot.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdgaussian2}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of real data for bayesian model with different covariance}
+                \label{fig:rdg2}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot.The plot is Figure~\ref{fig:rdc2}.\\
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdc2}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for Real data for bayesian model with different covariance}
+                \label{fig:rdc2}
+            \end{figure}\\
+            The performance matrix is given in Table~\ref{tab:rdcon2}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{1618}  & \cb{203}   & \cb{18}    & \cb{1839}  &\cb{0.12}\\ 
+                        & Class 2       & \cb{219}   & \cw{1647}  & \cb{0}     & \cb{1866}  &\cb{0.117}\\ 
+                        & Class 3       & \cb{10}    & \cb{14}    & \cw{2267}  & \cb{2291}  &\cb{0.010}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{1847}  & \cb{1864}  & \cb{2285}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.123}  & \cb{0.116}    & \cb{0.007}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Real data, Case 2 Algorithm}
+                    \label{tab:rdcon2}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.87 & \\
+                        \cline{1-2}
+                        Class 2 & 0.886 & 92.26 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.989 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+
+            \item \textbf{Case 3: Naive Bayes with} $\bm{\Sigma}_k = \sigma_k^2\bm{I}$\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:rdg3} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdgaussian3}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of Real data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:rdg3}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric circles in the contour plot. The plot is Figure~\ref{fig:rdc3}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdc3}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for Real data for Naive Bayes with $\bm{\Sigma}_k = \sigma_k^2\bm{I}$}
+                \label{fig:rdc3}
+            \end{figure}
+            As we can see, The shape of all the gaussians are symmetrical / circular contours.The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown.\\
+            The performance matrix is given in Table~\ref{tab:rdcon3}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{1628}  & \cb{211}    & \cb{0}    & \cb{1839}  &\cb{0.114}\\ 
+                        & Class 2       & \cb{291}    & \cw{1575}  & \cb{0}    & \cb{1866}  &\cb{0.1553}\\ 
+                        & Class 3       & \cb{6}    & \cb{14}    & \cw{2271}  & \cb{2451}  &\cb{0.008}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{1925}  & \cb{1900}  & \cb{2271}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.154}    & \cb{0.125}    & \cb{0}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Real data, Case 3 Algorithm}
+                    \label{tab:rdcon3}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.88 & \\
+                        \cline{1-2}
+                        Class 2 & 0.84 & 91.24 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.99 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+
+            \item \textbf{Case 4: Naive Bayes with same covariance for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:rdg4} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdgaussian4}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of real data for Naive Bayes with same covariance}
+                \label{fig:rdg4}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:rdc4}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdc4}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for real data for Naive Bayes with different covariance}
+                \label{fig:rdc4}
+            \end{figure}
+            The covariance is same for each class, So it gives us a linear discriminant function of which boundaries are shown.
+            The performance matrix is given in Table~\ref{tab:rdcon4}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{1615}  & \cb{224}    & \cb{0}    & \cb{1839}  &\cb{0.121}\\ 
+                        & Class 2       & \cb{190}    & \cw{1676}  & \cb{0}    & \cb{1866}  &\cb{0.101}\\ 
+                        & Class 3       & \cb{8}    & \cb{15}    & \cw{2268}  & \cb{2291}  &\cb{0.01}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{1813}  & \cb{1915}  & \cb{2268}  & \cb{}  &\cb{}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.109}    & \cb{0.124}    & \cb{0}    & \cb{}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for real data, Case 4 Algorithm}
+                    \label{tab:rdcon4}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.87 & \\
+                        \cline{1-2}
+                        Class 2 & 0.89 & 92.71 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.98 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+
+            \item \textbf{Case 5: Naive Bayes with different covariance for all classes}\\
+            Gaussian pdf of class conditional probability is plotted and the three classes and decision boundary is seperated by different color. Figure~\ref{fig:rdg5} shows the plot.
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdgaussian5}
+                \vspace{-30pt}
+                \caption{Gaussian pdf of posterior probability showing decision boundary of overlapping data for Naive Bayes with different covariance}
+                \label{fig:rdg5}
+            \end{figure}\\
+            Now the decision boundary can be seen better in a contour plot. We expect concentric ellipses in the contour plot. The plot is Figure~\ref{fig:rdc5}.\\ 
+            \begin{figure}[ht]
+                \centering
+                \includegraphics[width=\textwidth]{rdc5}
+                \vspace{-30pt}
+                \caption{Contour plots and test data points showing decision boundary for real data for Naive Bayes with different covariance}
+                \label{fig:rdc5}
+            \end{figure}
+            The covariance is different for each class, So it gives us a non linear discriminant function of which boundaries are shown.
+            The confusion matrix and all the performance metrics are same for every algorithm we used. It is given in Table ~\ref{tab:rdcon5}:
+            \begin{table}[ht]
+                \centering
+                \minipage{0.75\textwidth}
+                    \begin{tabular}{c | c c c c | c | c |}
+                        \multicolumn{1}{c}{} & & \multicolumn{4}{c}{Prediction} \\ \cline{2-7}
+                         & & Class 1 & Class 2 & Class 3 & Total & Incl. Error \\
+                        \multirow{4}{*}{\rotatebox[origin=c]{90}{Truth}}
+
+                        & Class 1       & \cw{1641}  & \cb{193}    & \cb{5}    & \cb{150}  &\cb{0.107}\\ 
+                        & Class 2       & \cb{261}    & \cw{1605}  & \cb{0}    & \cb{150}  &\cb{0.139}\\ 
+                        & Class 3       & \cb{6}    & \cb{14}    & \cw{2271}  & \cb{150}  &\cb{0.008}\\ 
+                        \cline{2-7}
+                        & Total         & \cb{151}  & \cb{149}  & \cb{150}  & \cb{}  &\cb{0}\\ 
+                        \cline{2-7}
+                        & Excl. Error   & \cb{0.139}    & \cb{0.114}    & \cb{0.0022}    & \cb{0}    &\cb{}\\ 
+                        \cline{2-7}
+
+                    \end{tabular}
+                    \caption{Confusion matrix for Real data, Algorithm 5}
+                    \label{tab:rdcon5}
+                \endminipage\hfill
+                \minipage{0.25\textwidth}
+                    \begin{tabular}{| l | c | c |}
+                        \hline
+                        & Precision & Accuracy\\
+                        \hline
+                        Class 1 & 0.89 & \\
+                        \cline{1-2}
+                        Class 2 & 0.86 & 92.01 \%\\
+                        \cline{1-2}
+                        Class 3 & 0.991 & \\
+                        \hline
+                    \end{tabular}
+                    \caption{Performance metric}
+                \endminipage\hfill
+            \end{table}\\
+            \item \textbf{Performance evaluation}
+                Now with ROC and DET curves, we  can evaluate the performance. There are two possibilities, either I can see the performance of each algorithm in a particular class or i can take an algorithm and see which class achieved best performance for that model.\\
+                We plot both cases;
+                Table~\ref{tab:rdperfClasswise} shows ROC and DET curve for each algorithm in each class.\\
+                \begin{table}[ht]
+                    \begin{tabular}{ccc}
+                        \subfloat[Class 1 ROC]{\includegraphics[width = 2in]{rdrocCl1}} &
+                        \subfloat[Class 2 ROC]{\includegraphics[width = 2in]{rdrocCl2}} &
+                        \subfloat[Class 3 ROC]{\includegraphics[width = 2in]{rdrocCl3}} \\
+
+                        \subfloat[Class 1 DET]{\includegraphics[width = 2in]{rddetCl1}} &
+                        \subfloat[Class 2 DET]{\includegraphics[width = 2in]{rddetCl2}} &
+                        \subfloat[Class 3 DET]{\includegraphics[width = 2in]{rddetCl3}} 
+                    \end{tabular}
+                    \caption{For Real data, DET and ROC curves for each class}
+                    \label{tab:rdperfClasswise}
+                \end{table}
+                Table~\ref{tab:rdperfAlgowise} shows difference in performance of binary classification of each class for a particular algorithm.\\
+                \begin{table}[ht]
+                    \begin{tabular}{ccc}
+                        \subfloat[Algo 1 ROC]{\includegraphics[width = 2in]{rdrocAl1}} &
+                        \subfloat[Algo 2 ROC]{\includegraphics[width = 2in]{rdrocAl2}} &
+                        \subfloat[Algo 3 ROC]{\includegraphics[width = 2in]{rdrocAl3}} \\
+                        \subfloat[Algo 4 ROC]{\includegraphics[width = 2in]{rdrocAl4}} &
+
+                        \subfloat[Algo 5 ROC]{\includegraphics[width = 2in]{rdrocAl5}} &
+                        \subfloat[Algo 1 DET]{\includegraphics[width = 2in]{rddetAl1}} \\
+                        \subfloat[Algo 2 DET]{\includegraphics[width = 2in]{rddetAl2}} &
+                        \subfloat[Algo 3 DET]{\includegraphics[width = 2in]{rddetAl3}} &
+
+                        \subfloat[Algo 4 DET]{\includegraphics[width = 2in]{rddetAl4}} \\
+                        \subfloat[Algo 5 DET]{\includegraphics[width = 2in]{rddetAl5}} &
+                    \end{tabular}
+                    \caption{For Real data, DET and ROC curves for each class}
+                    \label{tab:rdperfAlgowise}
+                \end{table}
+        \end{enumerate}
 \end{enumerate}
-
-
-
 
  % ============================== Content ends here
 \end{questions}

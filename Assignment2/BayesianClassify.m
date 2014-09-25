@@ -36,4 +36,5 @@ for i=1:m
         g(j) = -(1/2)*(x - muHat)*inv(sigmaHat)*transpose(x - muHat) -(1/2)*log(det(sigmaHat)) + log(prior(k));
     end
     classLabels(i) = find(g == max(g));
+    classLabels(i,2:(1+k))=g;
 end
