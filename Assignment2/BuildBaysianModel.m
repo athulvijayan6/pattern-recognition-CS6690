@@ -1,5 +1,4 @@
-
-function [model] = BuildBaysianModel(trainData, caseNumber) %crossValidationData, 
+function [model] = BuildBaysianModel(trainData, caseNumber, crossValidationData) 
 % function [model] = BuildBaysianModel(trainData, crossValidationData, caseNumber)
 %
 % Builds Bayesian model using the given training data and cross validation
@@ -26,6 +25,9 @@ function [model] = BuildBaysianModel(trainData, caseNumber) %crossValidationData
 %
 % See Also : BayesianClassify.m
 %
+if nargin<3
+    crossValidationData = [];
+end
 
 m = size(trainData, 1); % number of training examples
 n = size(trainData, 2) - 1; % number of feature dimension
