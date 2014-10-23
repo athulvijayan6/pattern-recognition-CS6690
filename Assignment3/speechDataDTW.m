@@ -1,7 +1,7 @@
 % @Author: Athul Vijayan
 % @Date:   2014-10-23 12:00:41
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-10-23 12:28:12
+% @Last Modified time: 2014-10-23 23:32:46
 
 paths = {'digit_data/four/' ; 'digit_data/seven/'; 'digit_data/nine/'; 'digit_data/two/'; 'digit_data/five/'};
 for i=1: size(paths, 1)
@@ -13,7 +13,10 @@ for i=1: size(paths, 1)
 end
 
 for i=1:length(trainFiles)
-    template{i} = importdata(strcat(paths{i}, trainFiles{i}{randi(length(trainFiles{i}))}), ' ');
+    for j=1:5
+        d = importdata(strcat(paths{i}, trainFiles{i}{randi(length(trainFiles{i}))}), ' ');
+        template{i}{j} = d;
+    end
 end
 
 result = zeros(1, length(testFiles) +2);
@@ -21,10 +24,13 @@ for i=1:length(testFiles)
     for j=1:length(testFiles{i})
         a = importdata(strcat(paths{i}, testFiles{i}{j}), ' ');
         for m =1:length(template)
-            [scores(m), ~] = myDTW(a, template{m});
-        end
-        scores = scores./sum(scores);
+            for n=1:5
+                [s(n), ~] = myDTW(a, template{m}{n}, 10);
+            end
+            scores(m) = min(s);
+        end        
         predClass = find(scores == min(scores));
+        scores = scores./sum(scores);
         result = vertcat(result, [scores predClass i]);
     end
 end

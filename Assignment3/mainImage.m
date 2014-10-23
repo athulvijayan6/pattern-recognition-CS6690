@@ -1,7 +1,7 @@
 % @Author: Athul Vijayan
 % @Date:   2014-10-16 16:42:30
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-10-23 11:48:36
+% @Last Modified time: 2014-10-23 23:07:06
 
 % Load the feature data into matrices
 % @Author: athul
@@ -14,13 +14,13 @@ clc;
 warning off;
 % 4 7 9 2 5
 
-DO_TRAINING = false;
-dumpFile = 'imageGMM_n10.mat';
+DO_TRAINING = true;
+dumpFile = 'imageGMM_n15.mat';
 
 if DO_TRAINING
     paths = {'highway/features/' ; 'insidecity/features/'; 'mountain/features/'};
     trainData = zeros(1, 24);
-    numNorms = [10 10 10];
+    numNorms = [15 15 15];
     for i=1: size(paths, 1)
         allFiles = struct2table(dir(strcat(paths{i}, '*.jpg_color_edh_entropy')));
         allFiles = table2array(allFiles(:, 1));
@@ -36,7 +36,7 @@ if DO_TRAINING
     end
     trainData(1, :) = [];
     disp('starting training...');
-    [model, likelihood] = GMMtrain(trainData, numNorms, 'diagonal', 50, 1e-2);
+    [model, likelihood] = GMMtrain(trainData, numNorms, 'diagonal', 20, 100);
     clearvars -except model allFiles trainFiles testFiles trainData numNorms dumpFile paths likelihood;
     disp(strcat('Done training ...... saving model to  ', dumpFile))
     save(dumpFile);

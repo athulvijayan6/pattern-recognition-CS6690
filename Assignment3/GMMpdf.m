@@ -1,7 +1,7 @@
 % @Author: Athul Vijayan
 % @Date:   2014-10-18 06:45:20
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-10-23 07:14:06
+% @Last Modified time: 2014-10-23 23:08:54
 
 %% GMMpdf: The function extract parameters for a Gaussian Mixture Model using unlabelled training data.
 % Function usage
@@ -28,7 +28,8 @@ function [muHat, sigmaHat, piHat, likelihood] = GMMpdf(data, k, cov_type, max_it
     end
     [pts, dim] = size(data);
     % First Apply kmeans to find initial parameters
-    [ label, centroids, ~] = mykmeans( data, k, 5);
+    [ label, centroids, ~] = mykmeans( data, k, 10);
+    
     for i=1:k                       %initial parameters from k means
         muHat{i} = centroids(i, :);
         sigmaHat{i} = diag(var(data(find(label==i), :)));
@@ -40,13 +41,17 @@ function [muHat, sigmaHat, piHat, likelihood] = GMMpdf(data, k, cov_type, max_it
     l_old = inf;
     while ((iter_no<max_iter) && (delta > delta_cutoff))
         % Calculate the latent variable from old parameters  (E step in EM)
+        % tStart = tic;
         for i=1:pts
             for j=1:k
                 gamma(i, j) = piHat{j}*mvnpdf(data(i, :), muHat{j}, sigmaHat{j});
             end
             gamma(i, :) = gamma(i, :)./sum(gamma(i, :));
         end
+        % tElapsed = toc(tStart)
         % Reestimate parameters using latent variable (M step in EM)
+        % tStart = tic;
+
         for j=1:k
             N(j) = sum(gamma(:, j));
 
@@ -69,7 +74,9 @@ function [muHat, sigmaHat, piHat, likelihood] = GMMpdf(data, k, cov_type, max_it
                 sigmaHat{j} = sigmaHat{j}./ N(j);
             end
         end
+        % tElapsed=toc(tStart)
         % find new likelihood for convergence test
+        % tStart= tic;
         l_new = 0;
         for i=1:pts
             g = 0;
@@ -78,6 +85,7 @@ function [muHat, sigmaHat, piHat, likelihood] = GMMpdf(data, k, cov_type, max_it
             end
             l_new = l_new + log(g);
         end
+        % tElapsed = toc(tStart)
         delta = abs(l_new - l_old);
         likelihood(iter_no) = l_new;
         l_old = l_new;

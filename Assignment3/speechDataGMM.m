@@ -1,7 +1,7 @@
 % @Author: athul
 % @Date:   2014-10-21 16:04:10
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-10-23 11:48:13
+% @Last Modified time: 2014-10-23 23:06:59
 
 clear all;
 clc;
@@ -18,7 +18,6 @@ if DO_TRAINING
     for i=1: size(paths, 1)
         allFiles = struct2table(dir(strcat(paths{i}, '*.txt')));
         allFiles = table2array(allFiles(:, 1));
-        % allFiles = allFiles(1:15, :);
         allFiles = allFiles(randperm(size(allFiles, 1)), :);
         trainFiles{i} = allFiles(1:floor(0.8*length(allFiles)), :);
         testFiles{i} = setdiff(allFiles, trainFiles{i});
@@ -29,7 +28,7 @@ if DO_TRAINING
         end
     end
     trainData(1, :) = [];
-    [model, likelihood] = GMMtrain(trainData, numNorms, 'diagonal', 50, 1e-2);
+    [model, likelihood] = GMMtrain(trainData, numNorms, 'diagonal', 20, 100);
     clearvars -except model allFiles trainFiles testFiles trainData numNorms dumpFile paths likelihood;
     disp(strcat('Done training ...... saving model to  ', dumpFile))
     save(dumpFile);
