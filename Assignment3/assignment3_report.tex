@@ -1,0 +1,155 @@
+% @Author: athul
+% @Date:   2014-09-15 12:11:31
+% @Last Modified by:   Athul Vijayan
+% @Last Modified time: 2014-10-21 11:22:09
+
+\documentclass[11pt,paper=a4,answers]{exam}
+\usepackage{graphicx,lastpage}
+\usepackage{subfig}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{upgreek}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage[bookmarks]{hyperref}
+\usepackage{censor}
+\usepackage{amsmath}
+\usepackage{amssymb, amsthm}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\usepackage{bm}
+\usepackage{caption}
+\usepackage{enumerate}
+
+\newcommand{\cb}[1]{{\cellcolor{black! 15 }$ #1$}}
+\newcommand{\Oh}{\bm{\mathcal{O}}}
+\newcommand{\cw}[1]{{\cellcolor{black! 35 }$ \color{white} #1$}}
+\censorruledepth=-.2ex
+\censorruleheight=.1ex
+\hyphenpenalty 10000
+\usepackage[paperheight=10.5in,paperwidth=8.27in,bindingoffset=0in,left=0.8in,right=1in,
+top=0.7in,bottom=1in,headsep=.5\baselineskip]{geometry}
+\flushbottom
+\usepackage[normalem]{ulem}
+\renewcommand\ULthickness{2pt}   %%---> For changing thickness of underline
+\setlength\ULdepth{1.5ex}%\maxdimen ---> For changing depth of underline
+\renewcommand{\baselinestretch}{1}
+\pagestyle{empty}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\pagestyle{headandfoot}
+\headrule
+
+\newcommand{\continuedmessage}{%
+\ifcontinuation{\footnotesize continues\ldots}{}%
+ }
+\runningheader{\footnotesize \today}
+{\footnotesize Pattern Recognition}
+{\footnotesize Page \thepage\ of \numpages}
+\footrule
+\footer{\footnotesize}
+{}
+{\ifincomplete{\footnotesize section \IncompleteQuestion\ continues
+on the next page\ldots}{\iflastpage{\footnotesize End}{\footnotesize Please go        on to the next page\ldots}}}
+
+\usepackage{cleveref}
+\crefname{figure}{figure}{figures}
+\crefname{question}{question}{questions}
+%==============================================================
+\begin{document}
+
+\noindent
+\begin{minipage}[l]{.1\textwidth}%
+\noindent
+\end{minipage}
+\hfill
+\begin{minipage}[r]{.68\textwidth}%
+\begin{center}
+{\large \bfseries \par
+\Large Pattern Recognition Assignment 2 \\[2pt]
+\vspace{6pt}
+\small   \par}
+\end{center}
+\end{minipage}
+\begin{minipage}[l]{.195\textwidth}%
+\noindent
+{\footnotesize}
+\end{minipage}
+\par
+\noindent
+\uline{Group 12 \hfill \normalsize\emph \hfill       Athul Vijayan (ED11B004) \& KIRAN KUMAR.G.R (AM14D405)}\\
+\begin{questions}
+% ============================== Content starts here
+\question \textbf{Theory}
+\begin{itemize}
+    \item \textbf{k Means clustering}\\
+    In the problem of identifying the groups/ clusters in a data, K means finds the prototypes for each groups assuming the number of groups $k$ is known beforehand.\\
+    Suppose we have data set $\{\vec{x}_1, \vec{x}_2, \cdots, \vec{x}_N\}$ of $N$ observations. We need to group each of these points to one of the $k$ clusters. We do it by assigning label to each point such that the Distortion measure is lowest. $\bm{\mu}_k$ is the prototype for $k^{th}$ cluster.
+    $$\mathbb{D} = \sum_{n=1}^N \sum_{k=1}^K \gamma_{nk}|| \vec{x}_n - \bm{\mu}_k||$$
+    Where $\gamma_{nk} = 1$ for if $\vec{x}_n$ is labeled to $\bm{\mu}_k$ and $0$ otherwise.\\
+    We can do this through an iterative procedure in which each iteration involves two successive steps corresponding to successive optimizations with respect to the $\gamma_{nk}$ and the $\bm{\mu}_k$ . First we choose some initial values for the $\bm{\mu}_k$ . Then in the first phase we minimize $\mathbb{D}$ with respect to the $\gamma_{nk}$ , keeping the $\bm{\mu}_k$ fixed. In the second phase we minimize $\mathbb{D}$ with respect to the $\bm{\mu}_k$ , keeping $\gamma_{nk}$ fixed. This two-stage optimization is then repeated until convergence.
+
+    \item \textbf{Gaussian Mixture Models}\\
+
+\end{itemize}
+
+\question \textbf{Implementation}
+\begin{itemize}
+    \item \textbf{Image Data}\\
+    Each image in each class is given as a feature matrix of dimension $36 \times 23$. Our aim is to use part of given data to to find maximum likelihood parameters and use the rest of images to test the model. We will go details of procedure in each choice of model.
+    \begin{enumerate}[a.]
+        \item \textbf{Gaussian Mixture Model}
+        \noindent
+        \begin{itemize}
+            \item Here, we consider each image as a sequence of feature vectors. i.e we can consider $36 \times 23$ matrix as a sequence $\{\vec{x}_1, \vec{x}_2, \cdots, \vec{x}_{36}\}$ where $\vec{x}_i$ is 23 dimension vector.
+            \item Each of this vector represents block of an image.
+            \item During training, each class conditional probability is modeled as GMM. We can do this by concatenating \textit{all the feature vectors} that belong to a class and fitting $k$ Gaussians with it. $k$ can be subjected to iteration.
+            \item For classifying an image to a class, we take the 36 feature vectors in an image. we need joint class conditional probability of these vectors to be maximum.
+            \item In GMM, we consider each of these 'Blocks' are independent. That simplifies our problem. Now we just need to multiply marginal probabilities of these feature vectors.
+            \item Multiplying all the probabilities give us a valid probability measure which can be used as scores.
+            \item These scores are normalized and used for classifying.
+        \end{itemize}
+        \item \textbf{Hidden Markov Model}
+    \end{enumerate}
+
+
+    \item \textbf{Speech Data}\\
+    Like in image data, features from each utterance is extracted in the form of frames of feature vectors. Only difference is that here, the number of frames for each test object is different.\\
+    Each utterance is given as extracted features. Each utterance $\Oh$ can be written as 
+    $$ \Oh = \{\bm{o}_1, \bm{o}_2, \cdots, \bm{o}_n, \}$$
+    Where $\bm{o}_i$ is $i^{th}$ frame which is a feature vector of 39 dimensions. For each utterances, the number of frames $n$ could be different.
+    \begin{enumerate}
+        \item \textbf{GMM}
+        \begin{itemize}
+            \item Like before, during training, each class conditional probability is modeled as GMM. We can do this by concatenating \textit{all the frames} that belong to a class and fitting $k$ Gaussians with it. $k$ can be subjected to iteration.
+            \item For classifying an image to a class, we take the all frames in an utterance. we need joint class conditional probability of these vectors to be maximum.
+            \item Here we are about to make a huge assumption that could result in poor results. That is, we assume that each of there frames are independent. With this assumption, we can multiply the marginal probability of each frames to find the score.
+            \item The obtained scores are normalized and used for classification.
+        \end{itemize}
+        \item \textbf{HMM}
+        \item \textbf{Dynamic Time Warping}\\
+            We use DTW to identify the spoken word by comparing the test utterance with a list of reference template utterances. If we look from a classification perspective, we need to classify a new utterance to one of the five classes.\\
+            It is done here by:
+            \begin{itemize}
+                \item In the training data we are given multiple utterances of the same word by different persons. From all these utterances that belong to a particular class, we create some \textit{references} for the class. So we make prototypes for the class during training.
+                \item Once we have the reference template for each class, we can test new data for classification. For that, we check the similarity of test utterance with template utterances of each class using an efficient DTW algorithm.
+                \item We assign the test data to class having maximum similarity.
+            \end{itemize}
+            The reference template for a particular word can be seen as the parameters of that particular class.Now the concern is how to make reference templates. 
+
+            \begin{itemize}
+                \item We need to bring all the utterances to same time length in order to do clustering.
+                \item Next concern is what length we bring everything to? We choose length of template in each class by median of length of utterances in the class. And we bring all the other utterances to this length.
+                \item We average the time synchronized sequences to get the reference template. 
+            \end{itemize}
+        
+    \end{enumerate}
+    % \end{enumerate}
+    
+    
+\end{itemize}
+
+ % ============================== Content ends here
+\end{questions}
+% \begin{center}
+% \rule{.7\textwidth}{1pt}
+% \end{center}
+\end{document} 
