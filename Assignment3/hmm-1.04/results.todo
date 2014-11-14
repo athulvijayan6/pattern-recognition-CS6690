@@ -1,0 +1,22 @@
+Image Data
+	-3 HMM
+		-2 numStates = 5 ; numSyms = 50 ------> 76.19
+		-2 numStates = 5 ; numSyms = 128 ------> 74.07
+		-2 numStates = 3 ; numSyms = 32 ------> 75.66
+		-2 numStates = 6 ; numSyms = 256 ------> 75.66
+
+
+Speech
+	-3 HMM
+		-2 numStates = 5 ; numSyms = 50 ------> 76.19
+		-2 numStates = 5 ; numSyms = 64 ------> 95
+
+Hand writing data
+	-3 HMM
+		-2 numStates = 10 ; numSyms = 512 ------> 76.07
+		-2 numStates = 12 ; numSyms = 128 ------> 71.xx
+
+		-4 numStates = 8 ; numSyms = 512 ------> 78.43
+		-4 numStates = 8 ; numSyms = 256 ------> 81.96
+		-4 numStates = 6 ; numSyms = 128 ------> 80.78
+		-4 numStates = 16 ; numSyms = 320 ------> 92.15

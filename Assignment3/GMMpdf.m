@@ -1,7 +1,7 @@
 % @Author: Athul Vijayan
 % @Date:   2014-10-18 06:45:20
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-10-23 23:08:54
+% @Last Modified time: 2014-10-27 17:21:35
 
 %% GMMpdf: The function extract parameters for a Gaussian Mixture Model using unlabelled training data.
 % Function usage

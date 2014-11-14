@@ -1,7 +1,7 @@
 % @Author: Athul Vijayan
 % @Date:   2014-10-18 18:00:35
 % @Last Modified by:   Athul Vijayan
-% @Last Modified time: 2014-10-23 10:27:56
+% @Last Modified time: 2014-11-03 15:48:33
 
 %% GMMclassify: function description
 function [classLabels, scores] = GMMclassify(model, testData)
@@ -21,9 +21,8 @@ function [classLabels, scores] = GMMclassify(model, testData)
             for m=1:numNorms
                 P(j) = P(j) + piHat{m}*mvnpdf(x, muHat{m}, sigmaHat{m});
             end
-            P(j) = log(P(j));
         end
-        scores(i, :) = P./sum(P);
+        scores(i, :) = P;
         classLabels(i) = find(scores(i, :) == max(scores(i, :)));
     end
 end
